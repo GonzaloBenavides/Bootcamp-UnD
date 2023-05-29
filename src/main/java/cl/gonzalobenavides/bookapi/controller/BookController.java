@@ -2,6 +2,7 @@ package cl.gonzalobenavides.bookapi.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -12,7 +13,7 @@ import cl.gonzalobenavides.bookapi.models.Libro;
 import cl.gonzalobenavides.bookapi.services.LibroServ;
 import jakarta.websocket.server.PathParam;
 
-@RestController("/api")
+@Controller("/api")
 public class BookController {	
 
 	@Autowired
@@ -39,5 +40,12 @@ public class BookController {
 	public void burn(@PathVariable("id") Long id) {
 		service.deleteBook(id);
 	}
-
+	
+	@RequestMapping(path="/books/{id}", method = RequestMethod.GET)
+	public String check(@PathVariable("id") Long id, Model mod) {
+		Libro libro = service.findLibro(id);
+		mod.addAttribute("libro", libro);
+		
+		return "../show.jsp";
+	}
 }
